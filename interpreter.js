@@ -11,68 +11,64 @@ let b = (function Brainfuck(memLength) {
 		index++;
 		return source[index];
 	};
+
+    let result = '';
 	
 	return {
-		'getPointer': () => {
-			return pointer;
-		},
-		'getSource': () => {
-			let code = '';
-		},
 		'>': () => {
 			if(pointer < memLength) { 
 				pointer++; 
 			}
-			console.log('> => ', pointer, ': ', tape[pointer]);
 		},
 		'<': () => {
 			if(pointer > 0) { 
 				pointer--; 
 			}
-			console.log('< => ', pointer, ': ', tape[pointer]);
 		},
 		'+': () => {
 			tape[pointer] = tape[pointer] + 1;
-			console.log('+ => ', pointer, ": ", tape[pointer]);
 		},
 		'-': () => {
 			tape[pointer] = tape[pointer] - 1;
-			console.log('- => ', pointer, ': ', tape[pointer]);
 		},
 		'.': () => {
-			console.log(tape[pointer]);
+            result += (String.fromCharCode(tape[pointer]));
 		},
 		',': () => {
 			//tape[pointer] = readInput(val);
 		},
 		'[': () => {
-			console.log("WTF pointer is", pointer, "val is:", tape[pointer]);
 			if(tape[pointer] === 0) {
-				console.log("Reached [, finding matching ]...");
-				while(source[index] !== ']') { 
-					index++; 
-				} 
-				console.log("Matching ] found at index:", index, source[index]);
-				index++;
-			}
-			else {
-				console.log("Reached [", tape[pointer], index, source[index]);
+                let bal = 1;
+                while(bal > 0) {
+                    index++;
+                    if(source[index] === '[') {
+                        bal++;
+                    }
+                    else if(source[index] === ']') {
+                        bal--;
+                    }
+                }
+                index++;
 			}
 		},
-		//when we reach ] and the loop has terminated, we advance to 1 after ]
 		']': () => {
-			//problem is we need to find the MATCHING '[' and not just the next one we find
-			console.log("POINTER:", pointer, "VAL:", tape[pointer], source[index]);
 			if(tape[pointer] !== 0) {
-				console.log("Reached ], finding matching [...");
-				while(source[index] !== '[') {
-					index--;
-				}
-				console.log("Matching [ found at index:", index, source[index]);
-			}
-			else {
+                let bal = 1;
+                while(bal > 0) {
+                    index--;
+                    if(source[index] === '[') {
+                        bal--;
+                    }
+                    else if(source[index] === ']') {
+                        bal++;
+                    }
+                }
 			}
 		},
+        '#': () => {
+            console.log(result);
+        },
 		readInput
 	};
 } (30000));
@@ -83,10 +79,9 @@ let max = 0;
 let button = document.getElementById("read");
 button.addEventListener("click", function() {
 	let c;
-	while((c = b.readInput()) !== "#" && max < 200) {
+	while((c = b.readInput())) {
 		max++;
 		b[c]();
 	}
-   	//let c = b.readInput();
-   	//b[c]();
+    b['#']();
 });
