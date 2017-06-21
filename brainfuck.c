@@ -12,7 +12,6 @@ int main(int argc, char **argv) {
     file = fopen("source.b", "r");
     if(file) {
         while((read = fread(source, 1, sizeof(source), file)) > 0) {
-            fwrite(source, 1, read, stdout);
         }
         if(ferror(file)) {
             fprintf(stderr, "file error\n");
@@ -26,15 +25,13 @@ int main(int argc, char **argv) {
         exit(1);
     }
 
-    int x = 0;
-    while(source[x] != '\n') {
-        printf("%c", source[x]);
-        x++;
-    }
+	char *tp = &source[0];
+
+	run(ptr, source);
 
     return 0;
 }
 
 void run(uint8_t* ptr, char* source) {
-    printf("test: %u\n", ptr[2]);
+    printf("test: %u %c\n", ptr[2], source[2]);
 }
