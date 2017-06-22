@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include "brainfuck.h"
 
 int main(int argc, char **argv) {
@@ -8,7 +9,7 @@ int main(int argc, char **argv) {
     tp = (uint8_t *) calloc(30000, sizeof(char));
 
     FILE *file = NULL;
-    char source[1024];
+    char source[1024] = {0};
 
     file = fopen("source.b", "r");
     if(file) {
@@ -19,7 +20,7 @@ int main(int argc, char **argv) {
             curr++;
         }
         if(ferror(file)) {
-            fprintf(stderr, "file error\n");
+            fprintf(stderr, "File error\n");
             free(tp);
             exit(1);
         }
@@ -27,11 +28,10 @@ int main(int argc, char **argv) {
     }
 
     if(tp == NULL) {
-        fprintf(stderr, "calloc failed\n");
+        fprintf(stderr, "Calloc failed\n");
         free(tp);
         exit(1);
-    }
-
+    } 
     //source pointer
 	char *sp = &source[0];
 
@@ -41,13 +41,13 @@ int main(int argc, char **argv) {
 }
 
 //pointer to tape (memory cells), pointer to source code
+//wasm compiled run function should just take in the array of memory cells and the source as an array of chars 
 void run(uint8_t* tp, char* sp) {
     int sourcePointer = 0;
     int tapePointer = 0;
     char tok;
-    int count = 0;
+
     while(sp[sourcePointer] != 0) {
-        count++;
         tok = sp[sourcePointer];
         switch(tok) {
             case '>':
@@ -67,7 +67,7 @@ void run(uint8_t* tp, char* sp) {
                 tp[tapePointer] = tp[tapePointer] - 1;
                 break;
             case '.':
-                printf("%c", tp[tapePointer]);
+				putchar(tp[tapePointer]);
                 break;
             case ',':
                 break;
@@ -100,12 +100,11 @@ void run(uint8_t* tp, char* sp) {
                     }
                 }
                 break;
+			default:
+				fprintf(stderr, "Invalid token encountered\n");
+				break;
         }
         sourcePointer++;
-        if(count > 5000) {
-            fprintf(stderr, "looping too much\n");
-            exit(1);
-        }
     }
     printf("Program execution completed.\n");
 }
