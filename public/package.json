@@ -1,0 +1,21 @@
+{
+  "name": "brainfuck-interpreter-view",
+  "version": "1.0.0",
+  "description": "Frontend for brainfuck interpreter",
+  "main": "main.js",
+  "scripts": {
+    "test": "node test.js",
+    "start": "webpack --config webpack.config.js"
+  },
+  "author": "Jeffrey Chen",
+  "license": "ISC",
+  "dependencies": {
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1"
+  },
+  "devDependencies": {
+    "webpack": "^3.3.0"
+  }
+}

@@ -1,0 +1,13 @@
+{
+    "name": "brainfuck-interpreter",
+    "version": "0.1.0",
+    "description": "Online brainfuck interpreter",
+    "main": "app.js",
+    "scripts": {
+        "start": "node app.js"
+    },
+    "dependencies": {
+        "express": "^4.13.3"
+    },
+    "author": "Jeffrey Chen"
+}
